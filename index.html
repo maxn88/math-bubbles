@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Math Bubbles - Elizabeth's Math Game</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    height: 100dvh;
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* Desktop layout */
+  #game-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 200px;
+    bottom: 0;
+    overflow: hidden;
+  }
+
+  #sidebar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 15px;
+    gap: 25px;
+    border-left: 2px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Mobile layout */
+  @media (max-width: 600px) {
+    #game-area {
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 110px;
+    }
+
+    #sidebar {
+      top: auto;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 110px;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 8px 10px;
+      gap: 0;
+      border-left: none;
+      border-top: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #sidebar h2 { display: none; }
+
+    .coin-display {
+      padding: 6px 12px !important;
+      border-radius: 12px !important;
+    }
+
+    .coin-icon {
+      width: 28px !important;
+      height: 28px !important;
+      font-size: 14px !important;
+    }
+
+    #coin-count { font-size: 22px !important; }
+
+    #streak-display {
+      font-size: 16px !important;
+      min-height: 20px !important;
+    }
+
+    .speed-control {
+      flex-direction: row !important;
+      gap: 8px !important;
+      width: auto !important;
+    }
+
+    .speed-control label { font-size: 12px !important; }
+
+    #speed-slider { width: 80px !important; height: 6px !important; }
+
+    #speed-slider::-webkit-slider-thumb {
+      width: 28px !important;
+      height: 28px !important;
+    }
+
+    #speed-label { font-size: 13px !important; }
+
+    .stats {
+      flex-direction: row !important;
+      gap: 12px !important;
+      font-size: 11px !important;
+    }
+
+    .stats .stat-row {
+      width: auto !important;
+      gap: 5px;
+    }
+
+    .instructions { display: none; }
+  }
+
+  #sidebar h2 {
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  }
+
+  .coin-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 215, 0, 0.15);
+    border: 2px solid rgba(255, 215, 0, 0.4);
+    border-radius: 16px;
+    padding: 12px 20px;
+  }
+
+  .coin-icon {
+    width: 36px;
+    height: 36px;
+    background: radial-gradient(circle at 35% 35%, #ffe066, #ffb300, #e6a000);
+    border-radius: 50%;
+    border: 3px solid #cc8800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #8B6914;
+    font-size: 18px;
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+  }
+
+  #coin-count {
+    color: #ffe066;
+    font-size: 28px;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+  }
+
+  .speed-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .speed-control label {
+    color: #aaa;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  #speed-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 80%;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #4CAF50, #ff9800, #f44336);
+    outline: none;
+  }
+
+  #speed-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(0,0,0,0.4);
+  }
+
+  #speed-label {
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: #aaa;
+    font-size: 13px;
+  }
+
+  .stats .stat-row {
+    display: flex;
+    justify-content: space-between;
+    width: 140px;
+  }
+
+  .stats .stat-val {
+    color: #fff;
+    font-weight: bold;
+  }
+
+  #streak-display {
+    color: #ff9800;
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+    min-height: 30px;
+  }
+
+  .instructions {
+    color: #888;
+    font-size: 12px;
+    text-align: center;
+    line-height: 1.5;
+    margin-top: auto;
+    padding: 12px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+  }
+
+  .instructions strong {
+    color: #ff6b6b;
+  }
+
+  /* Bubbles */
+  .bubble {
+    position: absolute;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.1s;
+    text-align: center;
+    box-shadow:
+      inset -8px -8px 20px rgba(0,0,0,0.15),
+      inset 8px 8px 20px rgba(255,255,255,0.25),
+      0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  .bubble:hover {
+    transform: scale(1.08);
+  }
+
+  .bubble .problem {
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+
+  .bubble .answer {
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+
+  @media (max-width: 600px) {
+    .bubble .problem { font-size: 14px; }
+    .bubble .answer { font-size: 20px; }
+  }
+
+  /* Pop animation */
+  @keyframes pop {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.6; }
+    100% { transform: scale(0); opacity: 0; }
+  }
+
+  .bubble.popping {
+    animation: pop 0.3s ease-out forwards;
+    pointer-events: none;
+  }
+
+  /* Coin fly animation */
+  @keyframes coinFly {
+    0% { transform: scale(1) translateY(0); opacity: 1; }
+    100% { transform: scale(0.5) translateY(-80px); opacity: 0; }
+  }
+
+  .coin-fly {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: radial-gradient(circle at 35% 35%, #ffe066, #ffb300);
+    border-radius: 50%;
+    border: 2px solid #cc8800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #8B6914;
+    font-size: 14px;
+    animation: coinFly 0.6s ease-out forwards;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  /* Wrong click feedback */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+
+  .bubble.wrong-click {
+    animation: shake 0.4s ease;
+  }
+
+  /* Miss flash */
+  @keyframes missFlash {
+    0% { opacity: 0; }
+    30% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  .miss-text {
+    position: absolute;
+    color: #ff4444;
+    font-size: 20px;
+    font-weight: bold;
+    pointer-events: none;
+    animation: missFlash 0.8s ease-out forwards;
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.5);
+  }
+
+  .correct-text {
+    position: absolute;
+    color: #4CAF50;
+    font-size: 20px;
+    font-weight: bold;
+    pointer-events: none;
+    animation: missFlash 0.8s ease-out forwards;
+    text-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+  }
+</style>
+</head>
+<body>
+
+<div id="game-area"></div>
+
+<div id="sidebar">
+  <h2>Math Bubbles</h2>
+
+  <div class="coin-display">
+    <div class="coin-icon">$</div>
+    <span id="coin-count">0</span>
+  </div>
+
+  <div id="streak-display"></div>
+
+  <div class="speed-control">
+    <label>Speed</label>
+    <input type="range" id="speed-slider" min="1" max="5" value="2" step="1">
+    <span id="speed-label">Normal</span>
+  </div>
+
+  <div class="stats">
+    <div class="stat-row">
+      <span>Correct</span>
+      <span class="stat-val" id="stat-correct">0</span>
+    </div>
+    <div class="stat-row">
+      <span>Missed</span>
+      <span class="stat-val" id="stat-missed">0</span>
+    </div>
+    <div class="stat-row">
+      <span>Accuracy</span>
+      <span class="stat-val" id="stat-accuracy">-</span>
+    </div>
+  </div>
+
+  <div class="instructions">
+    Pop the bubbles with<br><strong>WRONG</strong> answers!<br>
+    Let the correct ones pass.
+  </div>
+</div>
+
+<script>
+const gameArea = document.getElementById('game-area');
+const coinCountEl = document.getElementById('coin-count');
+const speedSlider = document.getElementById('speed-slider');
+const speedLabel = document.getElementById('speed-label');
+const streakDisplay = document.getElementById('streak-display');
+const statCorrect = document.getElementById('stat-correct');
+const statMissed = document.getElementById('stat-missed');
+const statAccuracy = document.getElementById('stat-accuracy');
+
+let coins = 0;
+let streak = 0;
+let correct = 0;
+let missed = 0;
+let bubbles = [];
+let lastSpawn = 0;
+
+const SPEED_LABELS = { 1: 'Slow', 2: 'Normal', 3: 'Fast', 4: 'Faster', 5: 'Turbo' };
+const SPEED_FALL = { 1: 0.4, 2: 0.7, 3: 1.1, 4: 1.6, 5: 2.2 };
+const SPEED_SPAWN = { 1: 2500, 2: 1800, 3: 1300, 4: 900, 5: 600 };
+
+const BUBBLE_COLORS = [
+  'radial-gradient(circle at 35% 35%, #ff9a9e, #e0444e)',
+  'radial-gradient(circle at 35% 35%, #a18cd1, #6a3fb5)',
+  'radial-gradient(circle at 35% 35%, #fbc2eb, #e05db0)',
+  'radial-gradient(circle at 35% 35%, #84fab0, #2bb673)',
+  'radial-gradient(circle at 35% 35%, #a1c4fd, #4a7be0)',
+  'radial-gradient(circle at 35% 35%, #ffecd2, #e0a050)',
+  'radial-gradient(circle at 35% 35%, #f6d365, #e0a020)',
+  'radial-gradient(circle at 35% 35%, #89f7fe, #3ab0c7)',
+];
+
+speedSlider.addEventListener('input', () => {
+  speedLabel.textContent = SPEED_LABELS[speedSlider.value];
+});
+
+function randInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function createBubble() {
+  const a = randInt(0, 9);
+  const b = randInt(0, 9);
+  const correctAnswer = a + b;
+
+  // ~40% chance the displayed answer is correct
+  const isWrong = Math.random() > 0.4;
+  let displayedAnswer = correctAnswer;
+
+  if (isWrong) {
+    const offset = randInt(1, 3) * (Math.random() > 0.5 ? 1 : -1);
+    displayedAnswer = correctAnswer + offset;
+    if (displayedAnswer < 0) displayedAnswer = correctAnswer + Math.abs(offset);
+  }
+
+  const isMobile = window.innerWidth <= 600;
+  const size = isMobile ? randInt(70, 95) : randInt(80, 110);
+  const areaWidth = gameArea.offsetWidth;
+  const x = randInt(10, areaWidth - size - 10);
+  const color = BUBBLE_COLORS[randInt(0, BUBBLE_COLORS.length - 1)];
+
+  const el = document.createElement('div');
+  el.className = 'bubble';
+  el.style.width = size + 'px';
+  el.style.height = size + 'px';
+  el.style.left = x + 'px';
+  el.style.top = -size + 'px';
+  el.style.background = color;
+
+  el.innerHTML = `
+    <div class="problem">${a} + ${b} =</div>
+    <div class="answer">${displayedAnswer}</div>
+  `;
+
+  const bubble = {
+    el,
+    y: -size,
+    x,
+    size,
+    isWrong,
+    speed: SPEED_FALL[speedSlider.value],
+    active: true,
+  };
+
+  el.addEventListener('click', (e) => { e.preventDefault(); onBubbleClick(bubble); });
+  el.addEventListener('touchend', (e) => { e.preventDefault(); onBubbleClick(bubble); });
+
+  gameArea.appendChild(el);
+  bubbles.push(bubble);
+}
+
+function onBubbleClick(bubble) {
+  if (!bubble.active) return;
+
+  if (bubble.isWrong) {
+    bubble.active = false;
+    bubble.el.classList.add('popping');
+    coins++;
+    correct++;
+    streak++;
+    coinCountEl.textContent = coins;
+
+    const coinEl = document.createElement('div');
+    coinEl.className = 'coin-fly';
+    coinEl.textContent = '$';
+    coinEl.style.left = (bubble.x + bubble.size / 2 - 15) + 'px';
+    coinEl.style.top = (bubble.y + bubble.size / 2 - 15) + 'px';
+    gameArea.appendChild(coinEl);
+    setTimeout(() => coinEl.remove(), 600);
+
+    const txt = document.createElement('div');
+    txt.className = 'correct-text';
+    txt.textContent = '+1';
+    txt.style.left = (bubble.x + bubble.size / 2 - 10) + 'px';
+    txt.style.top = (bubble.y - 10) + 'px';
+    gameArea.appendChild(txt);
+    setTimeout(() => txt.remove(), 800);
+
+    setTimeout(() => {
+      bubble.el.remove();
+      bubbles = bubbles.filter(b => b !== bubble);
+    }, 300);
+  } else {
+    bubble.el.classList.add('wrong-click');
+    streak = 0;
+
+    const txt = document.createElement('div');
+    txt.className = 'miss-text';
+    txt.textContent = "That's correct!";
+    txt.style.left = (bubble.x + bubble.size / 2 - 50) + 'px';
+    txt.style.top = (bubble.y - 10) + 'px';
+    gameArea.appendChild(txt);
+    setTimeout(() => txt.remove(), 800);
+
+    setTimeout(() => bubble.el.classList.remove('wrong-click'), 400);
+  }
+
+  updateStats();
+}
+
+function updateStats() {
+  statCorrect.textContent = correct;
+  statMissed.textContent = missed;
+  const total = correct + missed;
+  statAccuracy.textContent = total > 0 ? Math.round((correct / total) * 100) + '%' : '-';
+  streakDisplay.textContent = streak >= 3 ? streak + ' streak!' : '';
+}
+
+function gameLoop(timestamp) {
+  const speed = parseInt(speedSlider.value);
+  const spawnInterval = SPEED_SPAWN[speed];
+
+  if (timestamp - lastSpawn > spawnInterval) {
+    createBubble();
+    lastSpawn = timestamp;
+  }
+
+  const areaHeight = gameArea.offsetHeight;
+  for (let i = bubbles.length - 1; i >= 0; i--) {
+    const b = bubbles[i];
+    if (!b.active) continue;
+
+    b.speed = SPEED_FALL[speed];
+    b.y += b.speed;
+    b.el.style.top = b.y + 'px';
+
+    if (b.y > areaHeight + 10) {
+      if (b.isWrong) {
+        missed++;
+        streak = 0;
+        updateStats();
+      }
+      b.el.remove();
+      bubbles.splice(i, 1);
+    }
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+requestAnimationFrame(gameLoop);
+</script>
+
+</body>
+</html>
