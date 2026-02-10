@@ -366,9 +366,315 @@
     animation: missFlash 0.8s ease-out forwards;
     text-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
   }
+
+  /* Overlay screens */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 10, 30, 0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .overlay-content {
+    text-align: center;
+    color: #fff;
+    max-width: 420px;
+    width: 90%;
+  }
+
+  .overlay-content h1 {
+    font-size: 40px;
+    margin-bottom: 8px;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+
+  .overlay-subtitle {
+    color: #aaa;
+    font-size: 16px;
+    margin-bottom: 30px;
+  }
+
+  #player-name {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    outline: none;
+    text-align: center;
+    margin-bottom: 24px;
+    font-family: inherit;
+  }
+
+  #player-name::placeholder { color: rgba(255, 255, 255, 0.4); }
+  #player-name:focus { border-color: rgba(255, 255, 255, 0.5); }
+
+  .time-select-label {
+    color: #aaa;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .time-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+
+  .time-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ccc;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .time-btn:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.4); }
+
+  .time-btn.selected {
+    background: rgba(76, 175, 80, 0.3);
+    border-color: #4CAF50;
+    color: #fff;
+  }
+
+  #play-btn, #play-again-btn {
+    padding: 14px 48px;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #4CAF50, #2bb673);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    font-family: inherit;
+  }
+
+  #play-btn:hover:not(:disabled), #play-again-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.4);
+  }
+
+  #play-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Game Over results grid */
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 24px 0;
+  }
+
+  .result-item {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+  }
+
+  .result-label {
+    color: #aaa;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .result-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .result-item.highlight {
+    border: 2px solid rgba(255, 215, 0, 0.4);
+    background: rgba(255, 215, 0, 0.1);
+  }
+
+  .result-item.highlight .result-value { color: #ffe066; }
+
+  #final-player-name {
+    color: #aaa;
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  /* Leaderboard */
+  .leaderboard {
+    margin: 20px 0 24px;
+    text-align: left;
+  }
+
+  .leaderboard-title {
+    color: #aaa;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .leaderboard-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .leaderboard-list li {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #ccc;
+    gap: 10px;
+  }
+
+  .leaderboard-list li:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .leaderboard-list li.current-run {
+    background: rgba(76, 175, 80, 0.15);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    color: #fff;
+  }
+
+  .lb-rank {
+    font-weight: bold;
+    color: #888;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .leaderboard-list li.current-run .lb-rank { color: #4CAF50; }
+
+  .lb-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .lb-score {
+    font-weight: bold;
+    color: #ffe066;
+    flex-shrink: 0;
+  }
+
+  .lb-date {
+    color: #666;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .leaderboard-empty {
+    color: #555;
+    font-size: 13px;
+    text-align: center;
+    padding: 12px;
+  }
+
+  /* Timer display */
+  .timer-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 26px;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .timer-display .timer-icon { font-size: 20px; }
+
+  .timer-display.warning { color: #ff9800; }
+
+  .timer-display.critical {
+    color: #f44336;
+    animation: timerPulse 0.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes timerPulse {
+    from { opacity: 1; }
+    to { opacity: 0.5; }
+  }
+
+  @media (max-width: 600px) {
+    .timer-display {
+      font-size: 18px !important;
+      gap: 4px !important;
+    }
+    .timer-display .timer-icon { font-size: 14px !important; }
+  }
 </style>
 </head>
 <body>
+
+<div id="start-screen" class="overlay">
+  <div class="overlay-content">
+    <h1>Math Bubbles</h1>
+    <p class="overlay-subtitle">Pop the wrong answers!</p>
+    <input type="text" id="player-name" placeholder="Your name" maxlength="20" autocomplete="off">
+    <div class="time-select">
+      <p class="time-select-label">Select time</p>
+      <div class="time-buttons">
+        <button class="time-btn" data-time="30">30s</button>
+        <button class="time-btn" data-time="60">1 min</button>
+        <button class="time-btn" data-time="120">2 min</button>
+      </div>
+    </div>
+    <button id="play-btn" disabled>Play</button>
+  </div>
+</div>
+
+<div id="gameover-screen" class="overlay" style="display: none;">
+  <div class="overlay-content">
+    <h1>Time's Up!</h1>
+    <p id="final-player-name"></p>
+    <div class="results-grid">
+      <div class="result-item highlight">
+        <div class="result-label">Score</div>
+        <div class="result-value" id="final-score">0</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Accuracy</div>
+        <div class="result-value" id="final-accuracy">-</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Best Streak</div>
+        <div class="result-value" id="final-streak">0</div>
+      </div>
+      <div class="result-item highlight">
+        <div class="result-label">High Score</div>
+        <div class="result-value" id="final-highscore">0</div>
+      </div>
+    </div>
+    <div class="leaderboard">
+      <div class="leaderboard-title" id="leaderboard-title">Top Scores</div>
+      <ul class="leaderboard-list" id="leaderboard-list"></ul>
+    </div>
+    <button id="play-again-btn">Play Again</button>
+  </div>
+</div>
 
 <div id="game-area"></div>
 
@@ -378,6 +684,11 @@
   <div class="coin-display">
     <div class="coin-icon">$</div>
     <span id="coin-count">0</span>
+  </div>
+
+  <div id="timer-display" class="timer-display" style="display: none;">
+    <span class="timer-icon">⏱</span>
+    <span id="timer">--</span>
   </div>
 
   <div id="streak-display"></div>
@@ -419,12 +730,40 @@ const statCorrect = document.getElementById('stat-correct');
 const statMissed = document.getElementById('stat-missed');
 const statAccuracy = document.getElementById('stat-accuracy');
 
+// Overlay elements
+const startScreen = document.getElementById('start-screen');
+const gameoverScreen = document.getElementById('gameover-screen');
+const playerNameInput = document.getElementById('player-name');
+const playBtn = document.getElementById('play-btn');
+const playAgainBtn = document.getElementById('play-again-btn');
+const timeBtns = document.querySelectorAll('.time-btn');
+
+// Timer elements
+const timerDisplay = document.getElementById('timer-display');
+const timerEl = document.getElementById('timer');
+
+// Game over result elements
+const finalPlayerName = document.getElementById('final-player-name');
+const finalScore = document.getElementById('final-score');
+const finalAccuracy = document.getElementById('final-accuracy');
+const finalStreak = document.getElementById('final-streak');
+const finalHighscore = document.getElementById('final-highscore');
+
+// Game state
 let coins = 0;
 let streak = 0;
+let bestStreak = 0;
 let correct = 0;
 let missed = 0;
 let bubbles = [];
 let lastSpawn = 0;
+
+// Round state
+let currentPlayer = '';
+let gameDuration = 0;
+let timeRemaining = 0;
+let timerInterval = null;
+let gameRunning = false;
 
 const SPEED_LABELS = { 1: 'Slow', 2: 'Normal', 3: 'Fast', 4: 'Faster', 5: 'Turbo' };
 const SPEED_FALL = { 1: 0.4, 2: 0.7, 3: 1.1, 4: 1.6, 5: 2.2 };
@@ -444,6 +783,176 @@ const BUBBLE_COLORS = [
 speedSlider.addEventListener('input', () => {
   speedLabel.textContent = SPEED_LABELS[speedSlider.value];
 });
+
+// --- Start screen logic ---
+
+// Load last player name
+const lastPlayer = localStorage.getItem('mathbubbles_lastPlayer');
+if (lastPlayer) playerNameInput.value = lastPlayer;
+
+function updatePlayBtn() {
+  const hasName = playerNameInput.value.trim().length > 0;
+  const hasTime = gameDuration > 0;
+  playBtn.disabled = !(hasName && hasTime);
+}
+
+playerNameInput.addEventListener('input', updatePlayBtn);
+
+timeBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    timeBtns.forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    gameDuration = parseInt(btn.dataset.time);
+    updatePlayBtn();
+  });
+});
+
+playBtn.addEventListener('click', startGame);
+playAgainBtn.addEventListener('click', () => {
+  gameoverScreen.style.display = 'none';
+  startScreen.style.display = '';
+});
+
+function startGame() {
+  currentPlayer = playerNameInput.value.trim();
+  if (!currentPlayer || !gameDuration) return;
+
+  // Save last player name
+  localStorage.setItem('mathbubbles_lastPlayer', currentPlayer);
+
+  // Reset stats
+  coins = 0;
+  streak = 0;
+  bestStreak = 0;
+  correct = 0;
+  missed = 0;
+  lastSpawn = 0;
+  bubbles.forEach(b => b.el.remove());
+  bubbles = [];
+
+  // Reset UI
+  coinCountEl.textContent = '0';
+  streakDisplay.textContent = '';
+  statCorrect.textContent = '0';
+  statMissed.textContent = '0';
+  statAccuracy.textContent = '-';
+
+  // Setup timer
+  timeRemaining = gameDuration;
+  timerEl.textContent = timeRemaining + 's';
+  timerDisplay.style.display = '';
+  timerDisplay.className = 'timer-display';
+
+  // Hide overlays, start game
+  startScreen.style.display = 'none';
+  gameoverScreen.style.display = 'none';
+  gameRunning = true;
+
+  // Start countdown
+  timerInterval = setInterval(() => {
+    timeRemaining--;
+    timerEl.textContent = timeRemaining + 's';
+
+    // Timer color changes
+    if (timeRemaining <= 5) {
+      timerDisplay.className = 'timer-display critical';
+    } else if (timeRemaining <= 10) {
+      timerDisplay.className = 'timer-display warning';
+    } else {
+      timerDisplay.className = 'timer-display';
+    }
+
+    if (timeRemaining <= 0) {
+      endGame();
+    }
+  }, 1000);
+}
+
+function endGame() {
+  gameRunning = false;
+  clearInterval(timerInterval);
+
+  // Clear remaining bubbles
+  bubbles.forEach(b => b.el.remove());
+  bubbles = [];
+
+  // Calculate results
+  const total = correct + missed;
+  const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+  // Save this run
+  const runTimestamp = Date.now();
+  saveScore(currentPlayer, gameDuration, coins, runTimestamp);
+
+  // Get personal best for this player+duration
+  const topForDuration = getTopScores(gameDuration, 100);
+  const personalBest = topForDuration
+    .filter(s => s.name === currentPlayer)
+    .reduce((best, s) => Math.max(best, s.score), 0);
+
+  // Show game over screen
+  finalPlayerName.textContent = currentPlayer;
+  finalScore.textContent = coins;
+  finalAccuracy.textContent = accuracy + '%';
+  finalStreak.textContent = bestStreak;
+  finalHighscore.textContent = personalBest;
+  renderLeaderboard(gameDuration, runTimestamp);
+  gameoverScreen.style.display = '';
+}
+
+// --- Score persistence ---
+
+function saveScore(name, duration, score, timestamp) {
+  const scores = JSON.parse(localStorage.getItem('mathbubbles_scores') || '[]');
+  scores.push({ name, duration, score, ts: timestamp });
+  localStorage.setItem('mathbubbles_scores', JSON.stringify(scores));
+}
+
+function getTopScores(duration, limit) {
+  const scores = JSON.parse(localStorage.getItem('mathbubbles_scores') || '[]');
+  return scores
+    .filter(s => s.duration === duration)
+    .sort((a, b) => b.score - a.score || b.ts - a.ts)
+    .slice(0, limit);
+}
+
+function renderLeaderboard(duration, currentRunTs) {
+  const top5 = getTopScores(duration, 5);
+  const titleEl = document.getElementById('leaderboard-title');
+  const listEl = document.getElementById('leaderboard-list');
+  const durationLabel = duration >= 60 ? (duration / 60) + ' min' : duration + 's';
+  titleEl.textContent = 'Top 5 — ' + durationLabel;
+  listEl.innerHTML = '';
+
+  if (top5.length === 0) {
+    listEl.innerHTML = '<li class="leaderboard-empty">No scores yet</li>';
+    return;
+  }
+
+  top5.forEach((entry, i) => {
+    const li = document.createElement('li');
+    if (entry.ts === currentRunTs) li.classList.add('current-run');
+
+    const date = new Date(entry.ts);
+    const dateStr = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+      + ' ' + date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+
+    li.innerHTML =
+      '<span class="lb-rank">' + (i + 1) + '</span>' +
+      '<span class="lb-name">' + escapeHtml(entry.name) + '</span>' +
+      '<span class="lb-score">' + entry.score + '</span>' +
+      '<span class="lb-date">' + dateStr + '</span>';
+    listEl.appendChild(li);
+  });
+}
+
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// --- Core game ---
 
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -501,7 +1010,7 @@ function createBubble() {
 }
 
 function onBubbleClick(bubble) {
-  if (!bubble.active) return;
+  if (!bubble.active || !gameRunning) return;
 
   if (bubble.isWrong) {
     bubble.active = false;
@@ -509,6 +1018,7 @@ function onBubbleClick(bubble) {
     coins++;
     correct++;
     streak++;
+    if (streak > bestStreak) bestStreak = streak;
     coinCountEl.textContent = coins;
 
     const coinEl = document.createElement('div');
@@ -532,18 +1042,33 @@ function onBubbleClick(bubble) {
       bubbles = bubbles.filter(b => b !== bubble);
     }, 300);
   } else {
-    bubble.el.classList.add('wrong-click');
+    // Clicked a correct bubble — penalty
+    bubble.active = false;
     streak = 0;
+    coins--;
+    missed++;
+    coinCountEl.textContent = coins;
 
     const txt = document.createElement('div');
     txt.className = 'miss-text';
-    txt.textContent = "That's correct!";
-    txt.style.left = (bubble.x + bubble.size / 2 - 50) + 'px';
+    txt.textContent = "-1";
+    txt.style.left = (bubble.x + bubble.size / 2 - 10) + 'px';
     txt.style.top = (bubble.y - 10) + 'px';
     gameArea.appendChild(txt);
     setTimeout(() => txt.remove(), 800);
 
-    setTimeout(() => bubble.el.classList.remove('wrong-click'), 400);
+    // Sink to bottom
+    const areaHeight = gameArea.offsetHeight;
+    const sinkDistance = areaHeight - bubble.y - bubble.size;
+    bubble.el.style.transition = 'top 0.8s ease-in, opacity 0.3s ease 0.6s';
+    bubble.el.style.top = (areaHeight - bubble.size) + 'px';
+    bubble.el.style.opacity = '0.4';
+    bubble.el.style.pointerEvents = 'none';
+
+    setTimeout(() => {
+      bubble.el.remove();
+      bubbles = bubbles.filter(b => b !== bubble);
+    }, 900);
   }
 
   updateStats();
@@ -558,6 +1083,11 @@ function updateStats() {
 }
 
 function gameLoop(timestamp) {
+  if (!gameRunning) {
+    requestAnimationFrame(gameLoop);
+    return;
+  }
+
   const speed = parseInt(speedSlider.value);
   const spawnInterval = SPEED_SPAWN[speed];
 
@@ -575,14 +1105,68 @@ function gameLoop(timestamp) {
     b.y += b.speed;
     b.el.style.top = b.y + 'px';
 
-    if (b.y > areaHeight + 10) {
+    if (b.y + b.size >= areaHeight) {
       if (b.isWrong) {
         missed++;
         streak = 0;
+        coins--;
+        coinCountEl.textContent = coins;
+
+        // Pop animation at the bottom
+        b.active = false;
+        b.el.style.top = (areaHeight - b.size) + 'px';
+        b.el.classList.add('popping');
+
+        // Show -1 text
+        const txt = document.createElement('div');
+        txt.className = 'miss-text';
+        txt.textContent = '-1';
+        txt.style.left = (b.x + b.size / 2 - 10) + 'px';
+        txt.style.top = (areaHeight - b.size - 20) + 'px';
+        gameArea.appendChild(txt);
+        setTimeout(() => txt.remove(), 800);
+
         updateStats();
+        const bubble = b;
+        setTimeout(() => {
+          bubble.el.remove();
+          bubbles = bubbles.filter(bb => bb !== bubble);
+        }, 300);
+      } else {
+        // Correct bubble made it through — reward!
+        correct++;
+        streak++;
+        if (streak > bestStreak) bestStreak = streak;
+        coins++;
+        coinCountEl.textContent = coins;
+
+        b.active = false;
+        b.el.style.top = (areaHeight - b.size) + 'px';
+        b.el.classList.add('popping');
+
+        const coinEl = document.createElement('div');
+        coinEl.className = 'coin-fly';
+        coinEl.textContent = '$';
+        coinEl.style.left = (b.x + b.size / 2 - 15) + 'px';
+        coinEl.style.top = (areaHeight - b.size - 15) + 'px';
+        gameArea.appendChild(coinEl);
+        setTimeout(() => coinEl.remove(), 600);
+
+        const txt = document.createElement('div');
+        txt.className = 'correct-text';
+        txt.textContent = '+1';
+        txt.style.left = (b.x + b.size / 2 - 10) + 'px';
+        txt.style.top = (areaHeight - b.size - 20) + 'px';
+        gameArea.appendChild(txt);
+        setTimeout(() => txt.remove(), 800);
+
+        updateStats();
+        const bubble = b;
+        setTimeout(() => {
+          bubble.el.remove();
+          bubbles = bubbles.filter(bb => bb !== bubble);
+        }, 300);
       }
-      b.el.remove();
-      bubbles.splice(i, 1);
     }
   }
 
@@ -590,6 +1174,7 @@ function gameLoop(timestamp) {
 }
 
 requestAnimationFrame(gameLoop);
+updatePlayBtn();
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
